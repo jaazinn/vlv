@@ -1,4 +1,8 @@
-# MiniKit Template
+# Very Liquid Vaults
+
+The only vaults that ensure full withdrawability at any time.
+
+## Built on MiniKit Template
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-onchain --mini`](), configured with:
 
