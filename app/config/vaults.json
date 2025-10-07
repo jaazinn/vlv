@@ -1,0 +1,58 @@
+{
+  "vaults": [
+    {
+      "id": "vlv-usdc-base",
+      "name": "Very Liquid Core USDC",
+      "description": "The most liquid USDC vault on Base with instant withdrawals.",
+      "slug": "vlv-core-usdc-base",
+      "network": "base",
+      "chainId": 8453,
+      "vaultAddress": "0xf4D43A8570Dad86595fc079c633927aa936264F4",
+      "underlyingAsset": {
+        "symbol": "USDC",
+        "name": "USD Coin",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "decimals": 6
+      },
+      "apyEndpoint": "/api/apy/vlv-usdc-base",
+      "category": "stablecoin",
+      "riskLevel": "low"
+    },
+        {
+      "id": "vlv-core-usdc-ethereum",
+      "name": "Very Liquid Core USDC",
+      "description": "The most liquid USDC vault on Ethereum with instant withdrawals.",
+      "slug": "vlv-core-usdc-ethereum",
+      "network": "ethereum",
+      "chainId": 1,
+      "vaultAddress": "0x3AdF08AFe804691cA6d76742367cc50A24a1F4A1",
+      "underlyingAsset": {
+        "symbol": "USDC",
+        "name": "USD Coin",
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "decimals": 6
+      },
+      "apyEndpoint": "/api/apy/vlv-usdc-base",
+      "category": "stablecoin",
+      "riskLevel": "low"
+    },
+            {
+      "id": "vlv-frontier-usdc-ethereum",
+      "name": "Very Liquid Frontier USDC",
+      "description": "The most liquid high yield USDC vault on Ethereum with instant withdrawals.",
+      "slug": "vlv-frontier-usdc-ethereum",
+      "network": "ethereum",
+      "chainId": 1,
+      "vaultAddress": "0x13dDa6fD149a4Da0f2012F16e70925586ee603b8",
+      "underlyingAsset": {
+        "symbol": "USDC",
+        "name": "USD Coin",
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "decimals": 6
+      },
+      "apyEndpoint": "/api/apy/vlv-usdc-base",
+      "category": "stablecoin",
+      "riskLevel": "moderate"
+    }
+  ]
+}
