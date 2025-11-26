@@ -72,7 +72,7 @@ function createWagmiConfig(isMiniKit: boolean) {
     connectors,
     transports: {
       [base.id]: http(),
-      [mainnet.id]: http("https://eth-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY"),
+      [mainnet.id]: http(process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL),
     },
   });
 
