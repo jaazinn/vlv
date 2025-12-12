@@ -19,7 +19,6 @@ export interface VaultConfig {
     address: string;
     decimals: number;
   };
-  apyEndpoint: string;
   category: string;
   riskLevel: string;
   tags?: string[];

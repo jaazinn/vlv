@@ -36,14 +36,32 @@ interface YieldsPool {
   apyBaseInception: number | null;
 }
 
-interface YieldsResponse {
-  status: string;
-  data: YieldsPool[];
+interface RheoApiResponse {
+  [chainId: string]: {
+    [poolName: string]: number;
+  };
 }
+
+// Map chain IDs to chain names
+const CHAIN_ID_MAP: Record<string, string> = {
+  "8453": "Base",
+  "1": "Ethereum",
+};
+
+// Map Rheo pool names to our vault symbols
+const POOL_NAME_MAP: Record<string, Record<string, string>> = {
+  "8453": {
+    "VLV-Core": "VLVCOREUSDC",
+  },
+  "1": {
+    "VLV-Core": "VLVCOREUSDC",
+    "VLV-Frontier": "VLVFRONTIERUSDC",
+  },
+};
 
 const fetchYieldsData = unstable_cache(
   async (): Promise<YieldsPool[]> => {
-    const response = await fetch("https://yields.llama.fi/pools", {
+    const response = await fetch("https://api.rheo.xyz/pool-apy", {
       headers: {
         "User-Agent": "VLV-Farcaster-MiniApp/1.0",
       },
@@ -53,14 +71,60 @@ const fetchYieldsData = unstable_cache(
       throw new Error(`Failed to fetch yields data: ${response.statusText}`);
     }
 
-    const data: YieldsResponse = await response.json();
-    
-    // Filter for Size Credit vaults only
-    const sizeCreditVaults = data.data.filter(
-      (pool) => pool.project === "size-credit"
-    );
+    const data: RheoApiResponse = await response.json();
 
-    return sizeCreditVaults;
+    // Transform Rheo API data to match our YieldsPool interface
+    const yieldsData: YieldsPool[] = [];
+
+    for (const [chainId, pools] of Object.entries(data)) {
+      const chainName = CHAIN_ID_MAP[chainId];
+      if (!chainName) continue;
+
+      const chainPoolMap = POOL_NAME_MAP[chainId];
+      if (!chainPoolMap) continue;
+
+      for (const [poolName, apy] of Object.entries(pools)) {
+        const symbol = chainPoolMap[poolName];
+        if (!symbol) continue;
+
+        yieldsData.push({
+          chain: chainName,
+          project: "vlv",
+          symbol,
+          tvlUsd: 0,
+          apyBase: apy,
+          apyReward: null,
+          apy,
+          rewardTokens: null,
+          pool: poolName,
+          apyPct1D: null,
+          apyPct7D: null,
+          apyPct30D: null,
+          stablecoin: true,
+          ilRisk: "none",
+          exposure: "single",
+          predictions: {
+            predictedClass: null,
+            predictedProbability: null,
+            binnedConfidence: null,
+          },
+          poolMeta: "",
+          mu: 0,
+          sigma: 0,
+          count: 0,
+          outlier: false,
+          underlyingTokens: ["USDC"],
+          il7d: null,
+          apyBase7d: null,
+          apyMean30d: null,
+          volumeUsd1d: null,
+          volumeUsd7d: null,
+          apyBaseInception: null,
+        });
+      }
+    }
+
+    return yieldsData;
   },
   ["yields-data"],
   {
