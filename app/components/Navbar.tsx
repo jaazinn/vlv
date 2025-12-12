@@ -26,10 +26,10 @@ import Image from "next/image";
 // Chain selector component
 function ChainSelector() {
   const { switchChain } = useSwitchChain();
-  const { chain } = useAccount();
+  const { chain, isConnected } = useAccount();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  
+
   // Only show network warnings on vault pages (not on the main page)
   const isOnVaultPage = pathname && pathname !== '/' && pathname.includes('/vault/');
 
@@ -43,13 +43,13 @@ function ChainSelector() {
     {
       id: mainnet.id,
       name: "Ethereum",
-      logo: "/eth-logo.svg", 
+      logo: "/eth-logo.svg",
       chain: mainnet
     }
   ];
 
   const isOnSupportedNetwork = chain ? isChainSupported(chain.id) : false;
-  const shouldShowWarning = !isOnSupportedNetwork && isOnVaultPage;
+  const shouldShowWarning = isConnected && !isOnSupportedNetwork && isOnVaultPage;
   
   const currentChain = chains.find(c => c.id === chain?.id);
   const displayChain = currentChain || { 
@@ -296,12 +296,13 @@ function LoadingWalletButton() {
 
 export function NavBar() {
   const { isInMiniApp, isLoading: contextLoading } = useMiniAppContext();
+  const { isConnected } = useAccount();
 
   const renderWalletComponent = () => {
     if (contextLoading) {
       return <LoadingWalletButton />;
     }
-    
+
     return isInMiniApp ? <MiniAppWallet /> : <ExternalWalletConnect />;
   };
 
@@ -311,7 +312,7 @@ export function NavBar() {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-3">
-              <Image 
+              <Image
                 src="/vlv-logo.svg"
                 alt="VLV Logo"
                 width={32}
@@ -329,11 +330,11 @@ export function NavBar() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-3">
-          {/* Chain Selector */}
-          <ChainSelector />
-          
+          {/* Chain Selector - Only show when wallet is connected */}
+          {isConnected && <ChainSelector />}
+
           {/* Wallet Component - Efficiently renders based on context */}
           {renderWalletComponent()}
         </div>
